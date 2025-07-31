@@ -1,28 +1,34 @@
 import 'package:bloc/bloc.dart';
+import 'package:first_firebase/features/signup/auth_signup.dart';
 import 'package:meta/meta.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  SignUpBloc() : super(SignUpInitial()) {
+  final AuthSignUpService _authService = AuthSignUpService(); 
+
+  SignUpBloc({required AuthSignUpService authService})
+    : super(SignUpInitial()) {
     on<SignUpSubmittedEvent>(_onSignUpSubmitted);
     on<SignUpReset>(_onSignUpReset);
     on<InitSignUpScreenEvent>(_onSignUpInit);
   }
 
   Future<void> _onSignUpSubmitted(
-      SignUpSubmittedEvent event, Emitter<SignUpState> emit) async {
+    SignUpSubmittedEvent event,
+    Emitter<SignUpState> emit,
+  ) async {
     emit(SignUpLoading());
-    await Future.delayed(Duration(seconds: 2));
 
-    // محاكاة رد من سيرفر
-    if (event.email == 'exists@example.com') {
-      emit(SignUpFailure('Email already in use'));
-    } else if (event.email == 'error@example.com') {
-      emit(SignUpFailure('Server error occurred'));
-    } else {
-      emit(SignUpSuccess(event.email));
+    try {
+      final user = await _authService.signUpWithEmailAndPassword(
+        email: event.email,
+        password: event.password,
+      );
+      emit(SignUpSuccess(user!.email!));
+    } catch (e) {
+      emit(SignUpFailure(e.toString().replaceFirst('Exception: ', '')));
     }
   }
 
@@ -30,8 +36,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     emit(SignUpInitial());
   }
 
-  void _onSignUpInit(
-      InitSignUpScreenEvent event, Emitter<SignUpState> emit) {
+  void _onSignUpInit(InitSignUpScreenEvent event, Emitter<SignUpState> emit) {
     emit(SignUpInitial());
   }
 }

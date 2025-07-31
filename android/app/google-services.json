@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "826354328729",
-    "project_id": "itifire",
-    "storage_bucket": "itifire.firebasestorage.app"
+    "project_number": "24924827376",
+    "project_id": "iti-project-8a8e6",
+    "storage_bucket": "iti-project-8a8e6.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:826354328729:android:64818a8f3dd8e938c3c408",
+        "mobilesdk_app_id": "1:24924827376:android:f712045d8b12531baa5c35",
         "android_client_info": {
           "package_name": "com.example.first_firebase"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCRAhxG1b2Hf3lkygJqCd4rzJp-yTfGqcA"
+          "current_key": "AIzaSyCVSAdKJ5PY_cAeMsK22YbxGZ_YmXGPagc"
         }
       ],
       "services": {
