@@ -1,8 +1,12 @@
+import 'package:first_firebase/core/bottom_nav.dart';
+// import 'package:first_firebase/features/books/screens/book_store_page.dart';
 import 'package:first_firebase/features/login/LoginScreen.dart';
 import 'package:first_firebase/features/signup/bloc/signup_bloc.dart';
+import 'package:first_firebase/features/signup/validation/validation_confirm_password.dart';
 import 'package:first_firebase/features/signup/validation/validation_email_field.dart';
 import 'package:first_firebase/core/custom_text_field.dart';
 import 'package:first_firebase/features/signup/validation/validation_password_field.dart';
+import 'package:first_firebase/features/signup/validation/validation_username.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Fluttertoast.showToast(msg: state.errorMessage);
           } else if (state is SignUpSuccess) {
             Fluttertoast.showToast(msg: "Welcome, ${state.email}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+            );
           }
         },
         child: BlocBuilder<SignUpBloc, SignUpState>(
@@ -57,48 +65,67 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Sign up',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
                         const SizedBox(height: 10),
-                        const Text(
+                        Text(
                           'Create your account',
-                          style: TextStyle(fontSize: 20),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 20),
 
-                       CustomTextField(textFieldTitle: 'Username', icon: Icon(Icons.person)) ,
-                       
+                        CustomTextField(
+                          textFieldController: usernameController,
+                          textFieldValidator: validationUsernameField(
+                            context: context,
+                          ),
+                          textFieldTitle: 'Username',
+                          icon: Icon(Icons.person, color: Color(0xff9A392C)),
+                        ),
+
                         const SizedBox(height: 15),
 
-                       CustomTextField(textFieldController: emailController, textFieldValidator: validationEmailField(context: context), textFieldTitle: 'Email',icon:Icon(Icons.email) ,) , 
-                       
+                        CustomTextField(
+                          textFieldController: emailController,
+                          textFieldValidator: validationEmailField(
+                            context: context,
+                          ),
+                          textFieldTitle: 'Email',
+                          icon: Icon(Icons.email, color: Color(0xff9A392C)),
+                        ),
+
                         const SizedBox(height: 15),
 
-                      CustomTextField(textFieldTitle:'Password', textFieldController:passwordController , textFieldValidator: validationPasswordField(context: context), icon: Icon(Icons.lock), ) , 
-                        // TextFormField(
-                        //   controller: passwordController,
-                        //   validator: validationPasswordField(context: context),
-                        //   obscureText: true,
-                        //   decoration: const InputDecoration(
-                        //     filled: true,
-                        //     fillColor: Color(0xFFEFE4F2),
-                        //     border: OutlineInputBorder(),
-                        //     prefixIcon: Icon(Icons.lock),
-                        //     labelText: 'Password',
-                        //   ),
-                        // ),
+                        CustomTextField(
+                          textFieldTitle: 'Password',
+                          textFieldController: passwordController,
+                          textFieldValidator: validationPasswordField(
+                            context: context,
+                          ),
+                          icon: Icon(Icons.lock, color: Color(0xff9A392C)),
+                          isObscureText: true,
+                        ),
+
                         const SizedBox(height: 15),
 
-                       CustomTextField(textFieldTitle:'Confirm Password' , icon: Icon(Icons.lock_outline)), 
-                       
+                        CustomTextField(
+                          textFieldTitle: 'Confirm Password',
+                          textFieldController: confirmPasswordController,
+                          textFieldValidator: validationConfirmPasswordField(
+                            context: context,
+                            passwordController: passwordController,
+                          ),
+                          icon: Icon(
+                            Icons.lock_outline,
+                            color: Color(0xff9A392C),
+                          ),
+                          isObscureText: true,
+                        ),
+
                         const SizedBox(height: 20),
 
-                        
                         ElevatedButton(
                           onPressed:
                               isLoading
@@ -113,10 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       );
                                     }
                                   },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF9B29B2),
-                            minimumSize: const Size(400, 50),
-                          ),
+
                           child:
                               isLoading
                                   ? const CircularProgressIndicator(
@@ -132,24 +156,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         const SizedBox(height: 15),
 
-                        const Text('Or', style: TextStyle(fontSize: 20)),
-                        const SizedBox(height: 15),
+                        // const Text('Or', style: TextStyle(fontSize: 20)),
+                        // const SizedBox(height: 15),
 
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            minimumSize: const Size(300, 50),
-                          ),
-                          child: const Text(
-                            'Sign in with Google',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Color(0xFF9B29B2),
-                            ),
-                          ),
-                        ),
-
+                        // ElevatedButton(
+                        //   onPressed: () {},
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: Colors.white,
+                        //     minimumSize: const Size(300, 50),
+                        //   ),
+                        //   child: const Text(
+                        //     'Sign in with Google',
+                        //     style: TextStyle(
+                        //       fontSize: 25,
+                        //       color: Color(0xFF9B29B2),
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -164,12 +187,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 );
                               },
-                              child: const Text(
+                              child: Text(
                                 'Login',
-                                style: TextStyle(
-                                  color: Color(0xFF9B29B2),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
                               ),
                             ),
                           ],

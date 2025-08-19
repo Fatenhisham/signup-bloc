@@ -10,6 +10,6 @@ class SignUpSubmittedEvent extends SignUpEvent {
   SignUpSubmittedEvent(this.email, this.password);
 }
 
-class SignUpReset extends SignUpEvent {}
+// class SignUpReset extends SignUpEvent {}
 
 class InitSignUpScreenEvent extends SignUpEvent {}

@@ -1,3 +1,5 @@
+import 'package:first_firebase/core/bottom_nav.dart';
+// import 'package:first_firebase/features/books/screens/book_store_page.dart';
 import 'package:first_firebase/features/login/bloc/login_bloc.dart';
 import 'package:first_firebase/features/login/validation/login_validation.dart';
 
@@ -18,6 +20,14 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
+void dispose() {
+  _emailController.dispose();
+  _passwordController.dispose();
+  super.dispose();
+}
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<LoginBloc, LoginState>(
@@ -26,11 +36,14 @@ class _LoginState extends State<Login> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Login Successful: ${state.userEmail}')),
             );
-            
-          } else if (state is LoginFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
             );
+          } else if (state is LoginFailure) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
         child: Center(
@@ -42,14 +55,14 @@ class _LoginState extends State<Login> {
                 shrinkWrap: true,
                 children: [
                   const SizedBox(height: 40),
-                  const Text(
+                  Text(
                     'Welcome Back',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineLarge,
                     textAlign: TextAlign.center,
                   ),
-                  const Text(
+                  Text(
                     'Enter your credentials to login',
-                    style: TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 50),
@@ -57,9 +70,6 @@ class _LoginState extends State<Login> {
                     controller: _emailController,
                     validator: LoginValidation.validateEmail,
                     decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color(0xFFEFE4F2),
-                      border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email),
                       labelText: 'Email',
                     ),
@@ -70,9 +80,6 @@ class _LoginState extends State<Login> {
                     obscureText: true,
                     validator: LoginValidation.validatePassword,
                     decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color(0xFFEFE4F2),
-                      border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                       labelText: 'Password',
                     ),
@@ -94,21 +101,15 @@ class _LoginState extends State<Login> {
                             );
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF9B29B2),
-                          minimumSize: const Size(400, 50),
-                        ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(fontSize: 25, color: Colors.white),
-                        ),
+
+                        child: const Text('Login'),
                       );
                     },
                   ),
                   const SizedBox(height: 30),
-                  const Text(
+                  Text(
                     'Forget Password?',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF9B29B2)),
+                    style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 50),
@@ -120,11 +121,10 @@ class _LoginState extends State<Login> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: const Text(
+                        child: Text(
                           'Sign Up',
                           style: TextStyle(
-                            color: Color(0xFF9B29B2),
-                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),
@@ -140,4 +140,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

@@ -6,12 +6,12 @@ part 'signup_event.dart';
 part 'signup_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final AuthSignUpService _authService = AuthSignUpService(); 
+  final AuthSignUpService _authService = AuthSignUpService();
 
   SignUpBloc({required AuthSignUpService authService})
     : super(SignUpInitial()) {
     on<SignUpSubmittedEvent>(_onSignUpSubmitted);
-    on<SignUpReset>(_onSignUpReset);
+    // on<SignUpReset>(_onSignUpReset);
     on<InitSignUpScreenEvent>(_onSignUpInit);
   }
 
@@ -32,9 +32,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
   }
 
-  void _onSignUpReset(SignUpReset event, Emitter<SignUpState> emit) {
-    emit(SignUpInitial());
-  }
+  // void _onSignUpReset(SignUpReset event, Emitter<SignUpState> emit) {
+  //   emit(SignUpInitial());
+  // }
 
   void _onSignUpInit(InitSignUpScreenEvent event, Emitter<SignUpState> emit) {
     emit(SignUpInitial());
